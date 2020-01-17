@@ -13,7 +13,8 @@ imagerect = (210,-50)
 res = [1280, 720]
 card_x = 0
 card_y= 0
-deck = []
+deck = get_deck()
+deck_flipped = []
 
 gameDisplay = pygame.display.set_mode((res))
 gameDisplay.blit(myimage, imagerect)
@@ -27,13 +28,12 @@ exitbutton = button(yellow, 560, 480, 125, 30, 'EXIT')
 exitbutton2 = button(yellow, 50, 660, 125, 30, 'EXIT')
 
 def main_menu_draw():
-    yellowbutton4x3.draw (gameDisplay, (0,0,0))
-    yellowbutton4x4.draw (gameDisplay, (0,0,0))
-    yellowbutton5x4.draw (gameDisplay, (0,0,0))
-    yellowbutton6x5.draw (gameDisplay, (0,0,0))
-    yellowbutton6x6.draw (gameDisplay, (0,0,0))
-    exitbutton.draw (gameDisplay, (0,0,0))
-    exitbutton2.draw (gameDisplay, (0,0,0))
+    yellowbutton4x3.draw (gameDisplay)
+    yellowbutton4x4.draw (gameDisplay)
+    yellowbutton5x4.draw (gameDisplay)
+    yellowbutton6x5.draw (gameDisplay)
+    yellowbutton6x6.draw (gameDisplay)
+    exitbutton.draw (gameDisplay)
 
 def mouse_over_check(pos):
     if yellowbutton4x3.isOver(pos):
@@ -66,14 +66,12 @@ def mouse_over_check(pos):
     else:
         yellowbutton6x6.color = yellow
         main_menu_draw
-
-def get_deck():
-    deck = []
-    j= 0
-    for dx in range(0, 4):
-        for dy in range(0, 3):
-            deck.append(Card((0,255,0), x+width*dx, y+height*dy, width, height, 0))
-    return deck 
+    if exitbutton.isOver(pos):
+        exitbutton.color = white
+        main_menu_draw
+    else:
+        exitbutton.color = yellow
+        main_menu_draw
 
 def playcardgame4x4():
     get_deck(card_x, card_y)
@@ -102,7 +100,6 @@ def playcardgame5x4():
             
     exitbutton2.draw (gameDisplay, (0,0,0))
 
-
 pygame.display.set_caption('Shuffle')
 clock = pygame.time.Clock()
 crashed = False
@@ -113,45 +110,63 @@ while not crashed:
         pos = pygame.mouse.get_pos()
         if event.type == pygame.QUIT:
             crashed = True
+
+        #mouse over dentro do jogo
+        if gamescreen == True and event.type == pygame.MOUSEMOTION:
+            if deck[0].isOver(pos):
+                deck[0].color = (200,200,200)
+                for Card in deck:
+                    Card.draw(gameDisplay ,0)
+            else:
+                deck[0].color = (0,200,100)
+                for Card in deck:
+                    Card.draw(gameDisplay, 0)
+            
+            if deck[3].isOver(pos):
+                deck[3].color = (200,200,200)
+                for Card in deck:
+                    Card.draw(gameDisplay ,0)
+            else:
+                deck[3].color = (0,200,100)
+                for Card in deck:
+                    Card.draw(gameDisplay, 0)
         
+        #mouse over no menu
         if event.type == pygame.MOUSEMOTION and gamescreen == False:
             mouse_over_check(pos)
             main_menu_draw()
         
+        #clicar em coisas
         if event.type == pygame.MOUSEBUTTONDOWN:
             if yellowbutton4x3.isOver(pos):
+                gameDisplay.fill(black)
                 gamescreen = True
-                card_x = 4
-                card_y = 3
-                deck = get_deck()
-                print(deck[1])
-                while (gamescreen == True):
-                    gameDisplay.fill(black)
-                    print(len(deck))
-                    for card in deck:
-                        card.draw (gameDisplay, (0,0,0))
-                    if event.type == pygame.MOUSEMOTION:
-                        if card.isOver(pos):
-                            card.color = white
-                            for card in deck:
-                                card.draw (gameDisplay, (0,0,0))
-                    exitbutton2.draw (gameDisplay, (0,0,0))
-                    if event.type == pygame.MOUSEBUTTONDOWN:
-                        if exitbutton2.isOver(pos):
-                            gamescreen = False
+                get_deck()
+                for Card in deck:
+                    Card.draw(gameDisplay, 0)
+                exitbutton2.draw(gameDisplay)
+
+            if deck[0].isOver(pos):
+                deck[0].outline = 2
+                deck[0].color == (0,200,100)
+                deck_flipped.append(deck[0])
+                deck.remove(deck[0])
+                print(deck[0])
+                gameDisplay.fill(black)
+                deck_flipped[0].draw(gameDisplay, 0)
+                for Card in deck:
+                    Card.draw(gameDisplay, 0)
+                pygame.draw.circle(gameDisplay, (0,100,200), (475, 180), 30)
+
+                        
+
+#passamos o rato por uma carta, obtemos o index dessa carta, mudamos a cor dessa carta apartir do index.
+                
 
             if yellowbutton4x4.isOver(pos):
                 gameDisplay.fill(black)
-                card_x = 4
-                card_y = 4
-                playcardgame4x4()
-                gamescreen = True
             if yellowbutton5x4.isOver(pos):
                 gameDisplay.fill(black)
-                card_x = 5
-                card_y = 4
-                playcardgame5x4()
-                gamescreen = True
             if exitbutton.isOver(pos):
                 quit()
 

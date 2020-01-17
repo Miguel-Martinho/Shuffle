@@ -1,28 +1,33 @@
 import pygame
 import buttondraw
 
-x = 475
+x = 420
 y = 100
 height = 160
 width = 110
+outline = 0
 
 class Card():
-    def __init__(self, color, x,y,width,height, index):
+    def __init__(self, color, x,y,width,height, outline, index):
         self.color = color
         self.x = x
         self.y = y
         self.width = width
         self.height = height
+        self.outline = outline
         self.index = index
-def __repr__(self):
-    return f"{self.color} {self.x}"
+        ##self.shape = Shape
 
-    def draw(self,win,outline = None):
+    def draw(self,win,outline):
         #Call this method to draw the button on the screen
         if outline:
-            pygame.draw.rect(win, outline, (self.x-2,self.y-2,self.width+4,self.height+4), self.index)
+            pygame.draw.circle(win, (100,100,100), 475, 160, 80)
+            pygame.draw.rect(win, self.outline, (self.x,self.y,self.width+4,self.height+4),2)
             
-        pygame.draw.rect(win, self.color, (self.x,self.y,self.width,self.height), self.index)
+        pygame.draw.rect(win, self.color, (self.x,self.y,self.width,self.height),self.outline)
+
+    def __repr__(self):
+        return f"{self.color} {self.outline}"
 
     def isOver(self, pos):
         #Pos is the mouse position or a tuple of (x,y) coordinates
@@ -32,10 +37,24 @@ def __repr__(self):
             
         return False
 
-def get_deck(card_x, card_y):
+
+class shape():
+    def __init__(self, triangle, circle, square, color):
+        self.triangle = triangle
+        self.circle = circle
+        self.square = square
+        self.color = color
+
+def get_shape():
+    compendium= []
+    for i in range(0, 2):
+        compendium.append(circle)
+        compendium.append(square)
+        compendium.append(triangle)
+
+def get_deck():
     deck = []
-    j= 0
     for dx in range(0, 4):
         for dy in range(0, 3):
-            deck.append(Card((0,255,0), x+width*dx, y+height*dy, width, height, 0))
+            deck.append(Card((0,200,100), x+width*dx+(dx*10), y+height*dy+(dy*10), width, height, outline,dx+dy))
     return deck 
