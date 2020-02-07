@@ -1,13 +1,8 @@
 import pygame
-import buttondraw
+from buttondraw import *
 import random
 
-x = 420
-y = 100
-height = 160
-width = 110
 outline = 0
-
 
 class Card():
     def __init__(self, color, x,y,width,height, outline, index, flipped):
@@ -17,7 +12,7 @@ class Card():
         self.width = width
         self.height = height
         self.outline = outline
-        self.index = 1
+        self.index = index
         self.flipped = 0
         self.ingame = True
         self.text = " "
@@ -25,15 +20,14 @@ class Card():
     def draw(self, win, outline=None, flipped=None, ingame=None):
         if self.ingame == True:
             if self.flipped == 1:
-                pygame.draw.rect(win, (255, 0, 0), (self.x,self.y,self.width,self.height),outline)
+                pygame.draw.rect(win, (0, 200, 100), (self.x,self.y,self.width,self.height),outline)
                 if self.text != '':
-                    font = pygame.font.SysFont('NotoSans', 30)
+                    font = pygame.font.SysFont('NotoSans-Regular.ttf', 30)
                     text = font.render(self.text, 1, (255,255,0))
                     win.blit(text, (self.x + (self.width/2 - text.get_width()/2), self.y + (self.height/2 - text.get_height()/2)))
 
             else:    
-                pygame.draw.rect(win, self.color, (self.x,self.y,self.width,self.height))
-        
+                pygame.draw.rect(win, self.color, (self.x,self.y,self.width,self.height)) 
 
     def __repr__(self):
         return f"{self.index} {self.outline}"
@@ -45,6 +39,22 @@ class Card():
         return False
 
 def get_deck(cardinx, cardiny):
+    x = 420
+    y = 100
+    height = 160
+    width = 110
+    if cardinx == 4 and cardiny == 4:
+        y = 30
+    if cardinx == 5:
+        height = 120
+        width = 80
+    if cardinx == 6:
+        y = 50
+        height = 120
+        width = 80
+        if cardiny == 6:
+            height = 100
+            width = 70
     deck = []
     for dx in range(0, cardinx):
         for dy in range(0, cardiny):

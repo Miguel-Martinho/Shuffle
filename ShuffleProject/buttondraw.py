@@ -17,7 +17,7 @@ class button():
         pygame.draw.rect(win, self.color, (self.x,self.y,self.width,self.height),2)
         
         if self.text != '':
-            font = pygame.font.SysFont('NotoSans', 30)
+            font = pygame.font.SysFont('NotoSans-Regular.ttf', 30)
             text = font.render(self.text, 1, (255,255,0))
             win.blit(text, (self.x + (self.width/2 - text.get_width()/2), self.y + (self.height/2 - text.get_height()/2)))
 
